@@ -1,0 +1,153 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "com.amadeus.fiori.ppm.ipf.deiverables.masscreation",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "sourceTemplate": {
+      "id": "ui5template.basicSAPUI5ApplicationProject",
+      "version": "1.40.12"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZHCS_DELIVERABLES_SRV/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      },
+      "orderService": {
+        "uri": "/sap/opu/odata/sap/ZHCS_SERVICE_ORDER_MAN_SRV/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      },
+      "pfService": {
+        "uri": "/sap/opu/odata/sap/ZHCS_PORTFOLIO_STRUCTURE_SRV/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "rootView": {
+      "viewName": "com.amadeus.fiori.ppm.ipf.deiverables.masscreation.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    },
+    "dependencies": {
+      "minUI5Version": "1.84.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.amadeus.fiori.ppm.ipf.deiverables.masscreation.i18n.i18n"
+        }
+      },
+      "ListServiceOrder": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "": {
+        "dataSource": "mainService",
+        "settings": {
+            "metadataUrlParams": {
+              "sap-documentation": "heading"
+            },
+            "useBatch": false
+          }
+        },
+        "orderModel": {
+          "dataSource": "orderService",
+          "settings": {
+            "metadataUrlParams": {
+              "sap-documentation": "heading"
+            },
+            "useBatch": false
+          }
+        },
+        "pfModel": {
+          "dataSource": "pfService",
+          "settings": {
+            "metadataUrlParams": {
+              "sap-documentation": "heading"
+            },
+            "useBatch": false
+          }
+        }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "com.amadeus.fiori.ppm.ipf.deiverables.masscreation.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "Main",
+          "pattern": "",
+          "target": [
+            "Main"
+          ]
+        }
+      ],
+      "targets": {
+        "Main": {
+          "viewType": "XML",
+          "viewName": "Main"
+        }
+      }
+    }
+  }
+}
