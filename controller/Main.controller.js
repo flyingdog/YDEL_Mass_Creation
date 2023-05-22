@@ -56,6 +56,7 @@ sap.ui.define([
 	"use strict";
 
 	return DetailsController.extend("com.amadeus.fiori.ppm.ipf.deiverables.masscreation.controller.Main", {
+		//comment NP
 		onInit: function () {
 			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			this.aMandatoryFields = ["OrderExtTxt", "Parent", "InOutBudget", "Status", "ExpectedStartDate"];
