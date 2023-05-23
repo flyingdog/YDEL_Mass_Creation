@@ -56,7 +56,6 @@ sap.ui.define([
 	"use strict";
 
 	return DetailsController.extend("com.amadeus.fiori.ppm.ipf.deiverables.masscreation.controller.Main", {
-		//comment NP
 		onInit: function () {
 			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			this.aMandatoryFields = ["OrderExtTxt", "Parent", "InOutBudget", "Status", "ExpectedStartDate"];
@@ -74,10 +73,10 @@ sap.ui.define([
 			// this.oObject0 = JSON.parse(JSON.stringify(this.getView().getModel().getData()));
 
 			// // Initialize pfTree in Update mode
-			// if (typeof (this.pfTree) === "undefined") {
-			// 	this.pfTree = new PfTree(this, TreeTableUtils, this.oObject, this.oBundle);
-			// 	this.pfTree.init();
-			// }
+			if (typeof (this.pfTree) === "undefined") {
+				this.pfTree = new PfTree(this, TreeTableUtils, this.oObject, this.oBundle);
+				this.pfTree.init();
+			}
 		},
 
 		sProductHelpFragment: "com.amadeus.fiori.ppm.ipf.deiverables.masscreation.view.fragments.ProductHelp",
@@ -642,6 +641,8 @@ sap.ui.define([
 			oDataItem = this._addStaticValues(oDataItem);
 			aData.push(oDataItem);
 			this.getView().getModel("ListServiceOrder").setProperty("/", aData);
+			//visibleRowCount="4"
+			//this.getView().byId("MainTable").setVisibleRowCount("4");
 		},
 		onSuggestParent: function (oEvent) {
 			this.byId("ParentTxt").setText("");
@@ -1058,10 +1059,10 @@ function PfTree(that, TreeTableUtils, oObject0, oBundle) {
 
 		// 
 		if (this.selectedObject.type === this.pfType0.item || this.selectedObject.type === this.pfType0.phase) {
-			that.getView().getModel("ListServiceOrder").setProperty(that._oContext+"/Parent", this.selectedObject.id);
-			that.getView().getModel("ListServiceOrder").setProperty(that._oContext+"/ParentTxt", this.selectedObject.text);
-			
-			
+			that.getView().getModel("ListServiceOrder").setProperty(that._oContext + "/Parent", this.selectedObject.id);
+			that.getView().getModel("ListServiceOrder").setProperty(that._oContext + "/ParentTxt", this.selectedObject.text);
+
+
 			this.dialogClose();
 		}
 	};

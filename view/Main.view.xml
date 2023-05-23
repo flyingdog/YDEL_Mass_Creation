@@ -1,260 +1,683 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:c="sap.ui.core" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:t="sap.ui.table"
-	xmlns:fb="sap.ui.comp.filterbar" xmlns:u="sap.ui.unified"
-	controllerName="com.amadeus.fiori.ppm.ipf.deiverables.masscreation.controller.Main" xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page id="page" title="{i18n>MainTitle}" showFooter="true">
+<mvc:View
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:c="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:t="sap.ui.table"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:u="sap.ui.unified"
+	height="100%"
+	controllerName="com.amadeus.fiori.ppm.ipf.deiverables.masscreation.controller.Main"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+>
+	<Page
+		height="100%"
+		id="page"
+		title="{i18n>MainTitle}"
+		showFooter="true"
+	>
 		<content>
 			<Panel>
 				<l:VerticalLayout>
-					<u:FileUploader id="FileUploaderId" sameFilenameAllowed="true" iconOnly="false" buttonOnly="false" fileType="XLSX,xlsx"
-						icon="sap-icon://upload" iconFirst="true" style="Emphasized" change="onUpload"/>
+					<u:FileUploader
+						id="FileUploaderId"
+						sameFilenameAllowed="true"
+						iconOnly="false"
+						buttonOnly="false"
+						fileType="XLSX,xlsx"
+						icon="sap-icon://upload"
+						iconFirst="true"
+						style="Emphasized"
+						change="onUpload"
+					/>
 				</l:VerticalLayout>
 			</Panel>
-			<t:Table id="MainTable" rows="{ListServiceOrder>/}" width="auto" selectionMode="None" threshold="3000" visibleRowCountMode="Auto">
-				<t:columns >
+			<t:Table
+				id="MainTable"
+				visibleRowCountMode="Fixed"
+				rows="{ListServiceOrder>/}"
+				selectionMode="None"
+				threshold="3000"
+				visibleRowCount="5"
+			>
+				<t:columns>
 					<!-- Parent -->
-					<t:Column flexible="true" sortProperty="Parent" width="9rem" >
-						<Label tooltip="{i18n>Parent}" text="{i18n>Parent}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="Parent"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Parent}"
+							text="{i18n>Parent}"
+						/>
 						<t:template>
-						   
-							<Input id="Parent" type="Text" showValueHelp="true" valueHelpRequest="onPortfolioDialogOpen" enabled="{ListServiceOrder>EditableLine}"
-								value="{ListServiceOrder>Parent}" submit="onCheckInputField" change="onParentChange" showSuggestion="true" suggest="onSuggestParent"
-								suggestionItems="{ipoModel>/ValueHelps}" valueState="{ListServiceOrder>ParentState}" valueStateText="Unknown Parent" >
+							<Input
+								id="Parent"
+								type="Text"
+								showValueHelp="true"
+								valueHelpRequest="onPortfolioDialogOpen"
+								enabled="{ListServiceOrder>EditableLine}"
+								value="{ListServiceOrder>Parent}"
+								submit="onCheckInputField"
+								change="onParentChange"
+								showSuggestion="true"
+								suggest="onSuggestParent"
+								suggestionItems="{ipoModel>/ValueHelps}"
+								valueState="{ListServiceOrder>ParentState}"
+								valueStateText="Unknown Parent"
+							>
 								<suggestionItems>
-									<c:ListItem key="{ipoModel>Code}" text="{ipoModel>Description} ({ipoModel>Code})" additionalText=""/>
+									<c:ListItem
+										key="{ipoModel>Code}"
+										text="{ipoModel>Description} ({ipoModel>Code})"
+										additionalText=""
+									/>
 								</suggestionItems>
 							</Input>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="ParentTxt" width="9rem" >
-						<Label tooltip="{i18n>ParentTxt}" text="{i18n>ParentTxt}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="ParentTxt"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>ParentTxt}"
+							text="{i18n>ParentTxt}"
+						/>
 						<t:template>
-						   
-							<Label text="{ListServiceOrder>ParentTxt}"></Label>
+							<Label text="{ListServiceOrder>ParentTxt}"/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
 					<!-- Order -->
-					<t:Column flexible="true" sortProperty="OrderId"  width="9rem">
-						<Label tooltip="{i18n>OrderId}" text="{i18n>OrderId}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="OrderId"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>OrderId}"
+							text="{i18n>OrderId}"
+						/>
 						<t:template>
-							<Input id="OrderId" enabled="false" value="{ListServiceOrder>OrderId}"  submit="onCheckInputField"/>
+							<Input
+								id="OrderId"
+								enabled="false"
+								value="{ListServiceOrder>OrderId}"
+								submit="onCheckInputField"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
 					<!-- OrderType -->
-					<t:Column flexible="true" sortProperty="OrderType" width="9rem" >
-						<Label tooltip="{i18n>OrderType}" text="{i18n>OrderType}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="OrderType"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>OrderType}"
+							text="{i18n>OrderType}"
+						/>
 						<t:template>
-							<Input id="OrderType" enabled="false"  value="{ListServiceOrder>OrderType}" submit="onCheckInputField"/>
+							<Input
+								id="OrderType"
+								enabled="false"
+								value="{ListServiceOrder>OrderType}"
+								submit="onCheckInputField"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="OrderExtTxt" width="9rem">
-						<Label tooltip="{i18n>Description}" text="{i18n>Description}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="OrderExtTxt"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Description}"
+							text="{i18n>Description}"
+						/>
 						<t:template>
-							<Input id="OrderExtTxt" maxLength="200" valueState="{ListServiceOrder>OrderExtTxtState}" enabled="{ListServiceOrder>EditableLine}"
-								value="{ListServiceOrder>OrderExtTxt}"  submit="onCheckInputField"/>
+							<Input
+								id="OrderExtTxt"
+								maxLength="200"
+								valueState="{ListServiceOrder>OrderExtTxtState}"
+								enabled="{ListServiceOrder>EditableLine}"
+								value="{ListServiceOrder>OrderExtTxt}"
+								submit="onCheckInputField"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="OrderLongTxt" width="9rem" >
-						<Label tooltip="{i18n>LongDescription}" text="{i18n>LongDescription}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="OrderLongTxt"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>LongDescription}"
+							text="{i18n>LongDescription}"
+						/>
 						<t:template>
-							<TextArea id="LongDescription"  enabled="{ListServiceOrder>EditableLine}" value="{ListServiceOrder>OrderLongTxt}"
-								submit="onCheckInputField"/>
+							<TextArea
+								id="LongDescription"
+								enabled="{ListServiceOrder>EditableLine}"
+								value="{ListServiceOrder>OrderLongTxt}"
+								submit="onCheckInputField"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="Status"  width="9rem">
-						<Label tooltip="{i18n>DeliverableStatus}" text="{i18n>DeliverableStatus}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="Status"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>DeliverableStatus}"
+							text="{i18n>DeliverableStatus}"
+						/>
 						<t:template>
-							<Select id="Status" valueState="{ListServiceOrder>StatusState}" selectedKey="{ListServiceOrder>Status}" enabled="{ListServiceOrder>EditableLine}"
-								items="{ path: '/FacetFilterValues', filters: [{ path: 'FacetFilterField', operator: 'EQ', value1: 'YDEL_ORDERSTATUSES' }] }" 
-								visible="true">
-								<c:Item key="{FacetFilterValueID}" text="{FacetFilterValueText}"/>
+							<Select
+								id="Status"
+								valueState="{ListServiceOrder>StatusState}"
+								selectedKey="{ListServiceOrder>Status}"
+								enabled="{ListServiceOrder>EditableLine}"
+								items="{
+									path: '/FacetFilterValues',
+									filters: [{
+										path: 'FacetFilterField',
+										operator: 'EQ',
+										value1: 'YDEL_ORDERSTATUSES'
+									}]
+								}"
+								visible="true"
+							>
+								<c:Item
+									key="{FacetFilterValueID}"
+									text="{FacetFilterValueText}"
+								/>
 							</Select>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="InOutBudget" width="9rem">
-						<Label tooltip="{i18n>InOutBudget}" text="{i18n>InOutBudget}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="InOutBudget"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>InOutBudget}"
+							text="{i18n>InOutBudget}"
+						/>
 						<t:template>
-							<Select valueState="{ListServiceOrder>InOutBudgetState}" id="InOutBudget" selectedKey="{ListServiceOrder>InOutBudget}" change="onInOutBudgetChanged"
-								items="{ path: '/ValueHelps', filters: [{ path: 'FieldName', operator: 'EQ', value1: 'PMACTTYPES' }, { path: 'ParentCode', operator: 'EQ', value1: 'YDEL' }] }"
-								 visible="true">
-								<c:Item key="{Code}" text="{Description}"/>
+							<Select
+								valueState="{ListServiceOrder>InOutBudgetState}"
+								id="InOutBudget"
+								selectedKey="{ListServiceOrder>InOutBudget}"
+								change="onInOutBudgetChanged"
+								items="{
+									path: '/ValueHelps',
+									filters: [{
+										path: 'FieldName',
+										operator: 'EQ',
+										value1: 'PMACTTYPES'
+									}, {
+										path: 'ParentCode',
+										operator: 'EQ',
+										value1: 'YDEL'
+									}]
+								}"
+								visible="true"
+							>
+								<c:Item
+									key="{Code}"
+									text="{Description}"
+								/>
 							</Select>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="Responsible" width="9rem">
-						<Label tooltip="{i18n>Responsible}" text="{i18n>Responsible}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="Responsible"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Responsible}"
+							text="{i18n>Responsible}"
+						/>
 						<t:template>
-							<Input id="idInputResponsible" showSuggestion="true"  suggest="onSuggestResponsible" enabled="{ListServiceOrder>EditableLine}"
+							<Input
+								id="idInputResponsible"
+								showSuggestion="true"
+								suggest="onSuggestResponsible"
+								enabled="{ListServiceOrder>EditableLine}"
 								value="{ListServiceOrder>Responsible}"
-								suggestionItems="{/ValueHelps}" suggestionItemSelected="onSuggestResponsibleSelected">
+								suggestionItems="{/ValueHelps}"
+								suggestionItemSelected="onSuggestResponsibleSelected"
+							>
 								<suggestionItems>
-									<c:ListItem key="{Code}" text="{Description} ({Code})" additionalText=""/>
+									<c:ListItem
+										key="{Code}"
+										text="{Description} ({Code})"
+										additionalText=""
+									/>
 								</suggestionItems>
 							</Input>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="ExpectedStartDate" width="9rem">
-						<Label tooltip="{i18n>ExpectedStartDate}" text="{i18n>ExpectedStartDate}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="ExpectedStartDate"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>ExpectedStartDate}"
+							text="{i18n>ExpectedStartDate}"
+						/>
 						<t:template>
-							<DatePicker id="ExpectedStartDate"  valueState="{ListServiceOrder>ExpectedStartDateState}" dateValue="{ListServiceOrder>ExpectedStartDate}" enabled="{ListServiceOrder>EditableLine}"/>
+							<DatePicker
+								id="ExpectedStartDate"
+								valueState="{ListServiceOrder>ExpectedStartDateState}"
+								dateValue="{ListServiceOrder>ExpectedStartDate}"
+								enabled="{ListServiceOrder>EditableLine}"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="ExpectedDeliveryDate" width="9rem">
-						<Label tooltip="{i18n>ExpectedDeliveryDate}" text="{i18n>ExpectedDeliveryDate}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="ExpectedDeliveryDate"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>ExpectedDeliveryDate}"
+							text="{i18n>ExpectedDeliveryDate}"
+						/>
 						<t:template>
-							<DatePicker id="ExpectedDeliveryDate"  dateValue="{ListServiceOrder>ExpectedDeliveryDate}"
-								enabled="{ListServiceOrder>EditableLine}"/>
+							<DatePicker
+								id="ExpectedDeliveryDate"
+								dateValue="{ListServiceOrder>ExpectedDeliveryDate}"
+								enabled="{ListServiceOrder>EditableLine}"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="SoGrouping" width="9rem">
-						<Label tooltip="{i18n>SoGrouping}" text="{i18n>SoGrouping}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="SoGrouping"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>SoGrouping}"
+							text="{i18n>SoGrouping}"
+						/>
 						<t:template>
-							<Input id="idInputSoGrouping"  value="{ListServiceOrder>SoGrouping}" enabled="{ListServiceOrder>EditableLine}"/>
+							<Input
+								id="idInputSoGrouping"
+								value="{ListServiceOrder>SoGrouping}"
+								enabled="{ListServiceOrder>EditableLine}"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="ExternalLinkUrl" >
-						<Label tooltip="{i18n>ExternalLinkUrl}" text="{i18n>ExternalLinkUrl}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="ExternalLinkUrl"
+					>
+						<Label
+							tooltip="{i18n>ExternalLinkUrl}"
+							text="{i18n>ExternalLinkUrl}"
+						/>
 						<t:template>
-							<Input id="idInputExternalLinkUrl"  value="{ListServiceOrder>ExternalLinkUrl}" enabled="{ListServiceOrder>EditableLine}"/>
+							<Input
+								id="idInputExternalLinkUrl"
+								value="{ListServiceOrder>ExternalLinkUrl}"
+								enabled="{ListServiceOrder>EditableLine}"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="ExternalSystemTicketId" width="9rem">
-						<Label tooltip="{i18n>ExtSystId}" text="{i18n>ExtSystId}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="ExternalSystemTicketId"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>ExtSystId}"
+							text="{i18n>ExtSystId}"
+						/>
 						<t:template>
-							<Input id="ExtSystId" maxLength="40"  value="{ListServiceOrder>ExternalSystemTicketId}"
-								enabled="{ListServiceOrder>EditableLine}"/>
+							<Input
+								id="ExtSystId"
+								maxLength="40"
+								value="{ListServiceOrder>ExternalSystemTicketId}"
+								enabled="{ListServiceOrder>EditableLine}"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="ObjectiveLongTxt" width="9rem">
-						<Label tooltip="{i18n>Objective}" text="{i18n>Objective}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="ObjectiveLongTxt"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Objective}"
+							text="{i18n>Objective}"
+						/>
 						<t:template>
-							<TextArea id="Objective"  value="{ListServiceOrder>ObjectiveLongTxt}" enabled="{ListServiceOrder>EditableLine}" rows="5"/>
+							<TextArea
+								id="Objective"
+								value="{ListServiceOrder>ObjectiveLongTxt}"
+								enabled="{ListServiceOrder>EditableLine}"
+								rows="5"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="Priority" width="9rem">
-						<Label tooltip="{i18n>Priority}" text="{i18n>Priority}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="Priority"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Priority}"
+							text="{i18n>Priority}"
+						/>
 						<t:template>
-							<Select id="idInputPriority" enabled="{ListServiceOrder>EditableLine}" selectedKey="{ListServiceOrder>Priority}"
-								items="{ path: '/ValueHelps', filters: [{ path: 'FieldName', operator: 'EQ', value1: 'DELIVERABLE_PRIORITY' }] }" 
-								visible="true">
-								<c:Item key="{Code}" text="{Description}"/>
+							<Select
+								id="idInputPriority"
+								enabled="{ListServiceOrder>EditableLine}"
+								selectedKey="{ListServiceOrder>Priority}"
+								items="{
+									path: '/ValueHelps',
+									filters: [{
+										path: 'FieldName',
+										operator: 'EQ',
+										value1: 'DELIVERABLE_PRIORITY'
+									}]
+								}"
+								visible="true"
+							>
+								<c:Item
+									key="{Code}"
+									text="{Description}"
+								/>
 							</Select>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="Rank" width="9rem">
-						<Label tooltip="{i18n>Rank}" text="{i18n>Rank}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="Rank"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Rank}"
+							text="{i18n>Rank}"
+						/>
 						<t:template>
-							<Input id="Rank" value="{ListServiceOrder>Rank}"  enabled="{ListServiceOrder>EditableLine}" maxLength="3"/>
+							<Input
+								id="Rank"
+								value="{ListServiceOrder>Rank}"
+								enabled="{ListServiceOrder>EditableLine}"
+								maxLength="3"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="Product" width="9rem">
-						<Label tooltip="{i18n>Product}" text="{i18n>Product}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="Product"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Product}"
+							text="{i18n>Product}"
+						/>
 						<t:template>
-							<Input id="Product"  showValueHelp="true"
-							valueHelpRequest="onVhProduct" value="{ListServiceOrder>Product}" enabled="{ListServiceOrder>EditableLine}"/>
+							<Input
+								id="Product"
+								showValueHelp="true"
+								valueHelpRequest="onVhProduct"
+								value="{ListServiceOrder>Product}"
+								enabled="{ListServiceOrder>EditableLine}"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="Customer" width="9rem">
-						<Label tooltip="{i18n>Customer}" text="{i18n>Customer}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="Customer"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Customer}"
+							text="{i18n>Customer}"
+						/>
 						<t:template>
-							<Input id="Customer"  showValueHelp="true" placeholder="{i18n>Placeholder_Customer}" valueHelpRequest="onVhCustomer"
-								value="{ListServiceOrder>CustomerTxt}" enabled="{ListServiceOrder>EditableLine}"/>
+							<Input
+								id="Customer"
+								showValueHelp="true"
+								placeholder="{i18n>Placeholder_Customer}"
+								valueHelpRequest="onVhCustomer"
+								value="{ListServiceOrder>CustomerTxt}"
+								enabled="{ListServiceOrder>EditableLine}"
+							/>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="InvestmentProfile" width="9rem">
-						<Label tooltip="{i18n>InvestmentProfile}" text="{i18n>InvestmentProfile}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="InvestmentProfile"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>InvestmentProfile}"
+							text="{i18n>InvestmentProfile}"
+						/>
 						<t:template>
-							<Select id="idInputInvestmentProfile" enabled="{ListServiceOrder>EditableLine}" selectedKey="{ListServiceOrder>InvestmentProfile}"
-								items="{ path: '/ValueHelps', filters: [{ path: 'FieldName', operator: 'EQ', value1: 'DomainValues' }, { path: 'ParentCode', operator: 'EQ', value1: 'ZHCS_IPF_ITEM_INVESTMENT_PROFI' }] }"
-								 visible="true">
-								<c:Item key="{Code}" text="{Description}"/>
+							<Select
+								id="idInputInvestmentProfile"
+								enabled="{ListServiceOrder>EditableLine}"
+								selectedKey="{ListServiceOrder>InvestmentProfile}"
+								items="{
+									path: '/ValueHelps',
+									filters: [{
+										path: 'FieldName',
+										operator: 'EQ',
+										value1: 'DomainValues'
+									}, {
+										path: 'ParentCode',
+										operator: 'EQ',
+										value1: 'ZHCS_IPF_ITEM_INVESTMENT_PROFI'
+									}]
+								}"
+								visible="true"
+							>
+								<c:Item
+									key="{Code}"
+									text="{Description}"
+								/>
 							</Select>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" sortProperty="CommitmentLevel" width="9rem">
-						<Label tooltip="{i18n>CommitmentLevel}" text="{i18n>CommitmentLevel}"/>
+					<t:Column
+						flexible="true"
+						sortProperty="CommitmentLevel"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>CommitmentLevel}"
+							text="{i18n>CommitmentLevel}"
+						/>
 						<t:template>
-							<Select id="idInputCommitmentLevel" enabled="{ListServiceOrder>EditableLine}" selectedKey="{ListServiceOrder>CommitmentLevel}"
-								items="{ path: '/ValueHelps', filters: [{ path: 'FieldName', operator: 'EQ', value1: 'DomainValues' }, { path: 'ParentCode', operator: 'EQ', value1: 'ZHCS_IPF_ITEM_COMMITMENT_LEVEL' }] }"
-								 visible="true">
-								<c:Item key="{Code}" text="{Description}"/>
+							<Select
+								id="idInputCommitmentLevel"
+								enabled="{ListServiceOrder>EditableLine}"
+								selectedKey="{ListServiceOrder>CommitmentLevel}"
+								items="{
+									path: '/ValueHelps',
+									filters: [{
+										path: 'FieldName',
+										operator: 'EQ',
+										value1: 'DomainValues'
+									}, {
+										path: 'ParentCode',
+										operator: 'EQ',
+										value1: 'ZHCS_IPF_ITEM_COMMITMENT_LEVEL'
+									}]
+								}"
+								visible="true"
+							>
+								<c:Item
+									key="{Code}"
+									text="{Description}"
+								/>
 							</Select>
 						</t:template>
 						<t:customData>
-							<c:CustomData key="tableType" value="All"/>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
 						</t:customData>
 					</t:Column>
-					<t:Column flexible="true" width="4em">
+					<t:Column
+						flexible="true"
+						width="4em"
+					>
 						<Label/>
 						<t:template>
-							<Button icon="sap-icon://message-warning" text="{ListServiceOrder>WarningCount}" press="onWarningButtonPressed" class="sapUiSmallMarginEnd"
-								visible="{ListServiceOrder>DisplayWarning}"/>
+							<Button
+								icon="sap-icon://message-warning"
+								text="{ListServiceOrder>WarningCount}"
+								press="onWarningButtonPressed"
+								class="sapUiSmallMarginEnd"
+								visible="{ListServiceOrder>DisplayWarning}"
+							/>
 						</t:template>
 					</t:Column>
-					<t:Column flexible="true" width="6em">
+					<t:Column
+						flexible="true"
+						width="6em"
+					>
 						<Label/>
 						<t:template>
 							<!-- 						visible="{ListServiceOrder>DisplayWarning}"  enabled="{ListServiceOrder>DisplayWarning}" -->
-							<Button icon="sap-icon://delete" press="onRemoveLineButtonPressed" class="sapUiSmallMarginEnd"/>
+							<Button
+								icon="sap-icon://delete"
+								press="onRemoveLineButtonPressed"
+								class="sapUiSmallMarginEnd"
+							/>
 						</t:template>
 					</t:Column>
 				</t:columns>
@@ -263,11 +686,31 @@
 		<footer>
 			<Bar>
 				<contentRight>
-					<Button text="{i18n>ControlCheck}" id="ControlCheck" press="_checkControls"/>
-					<Button text="{i18n>ExcelTemplate}" id="ExcelTemplate" press="onExcelTemplatePressed"/>
-					<Button text="{i18n>ExcelDownload}" id="ExcelDownload" press="onExcelDownloadPressed"/>
-					<Button text="{i18n>AddNewLine}" id="AddNewLine" press="onAddNewLinePressed"/>
-					<Button text="{i18n>SendPosting}" type="Accept" press="onSendPosting"/>
+					<Button
+						text="{i18n>ControlCheck}"
+						id="ControlCheck"
+						press="_checkControls"
+					/>
+					<Button
+						text="{i18n>ExcelTemplate}"
+						id="ExcelTemplate"
+						press="onExcelTemplatePressed"
+					/>
+					<Button
+						text="{i18n>ExcelDownload}"
+						id="ExcelDownload"
+						press="onExcelDownloadPressed"
+					/>
+					<Button
+						text="{i18n>AddNewLine}"
+						id="AddNewLine"
+						press="onAddNewLinePressed"
+					/>
+					<Button
+						text="{i18n>SendPosting}"
+						type="Accept"
+						press="onSendPosting"
+					/>
 				</contentRight>
 			</Bar>
 		</footer>
