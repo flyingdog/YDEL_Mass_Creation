@@ -11,7 +11,7 @@
 	xmlns:html="http://www.w3.org/1999/xhtml"
 >
 	<Page
-		height="100%"
+		
 		id="page"
 		title="{i18n>MainTitle}"
 		showFooter="true"
@@ -34,13 +34,43 @@
 			</Panel>
 			<t:Table
 				id="MainTable"
-				visibleRowCountMode="Fixed"
+				visibleRowCountMode="Auto"
 				rows="{ListServiceOrder>/}"
 				selectionMode="None"
 				threshold="3000"
-				visibleRowCount="5"
+				visibleRowCount="Auto"
+				fixedColumnCount="2"
 			>
 				<t:columns>
+				<t:Column
+						flexible="true"
+						width="4em"
+					>
+						<Label/>
+						<t:template>
+							<Button
+								icon="sap-icon://message-warning"
+								text="{ListServiceOrder>WarningCount}"
+								press="onWarningButtonPressed"
+								class="sapUiSmallMarginEnd"
+								visible="{ListServiceOrder>DisplayWarning}"
+							/>
+						</t:template>
+					</t:Column>
+					<t:Column
+						flexible="true"
+						width="6em"
+					>
+						<Label/>
+						<t:template>
+							<!-- 						visible="{ListServiceOrder>DisplayWarning}"  enabled="{ListServiceOrder>DisplayWarning}" -->
+							<Button
+								icon="sap-icon://delete"
+								press="onRemoveLineButtonPressed"
+								class="sapUiSmallMarginEnd"
+							/>
+						</t:template>
+					</t:Column>
 					<!-- Parent -->
 					<t:Column
 						flexible="true"
@@ -49,7 +79,7 @@
 					>
 						<Label
 							tooltip="{i18n>Parent}"
-							text="{i18n>Parent}"
+							text="{i18n>Parent}" required="true"
 						/>
 						<t:template>
 							<Input
@@ -160,6 +190,7 @@
 						<Label
 							tooltip="{i18n>Description}"
 							text="{i18n>Description}"
+							required="true"
 						/>
 						<t:template>
 							<Input
@@ -178,30 +209,7 @@
 							/>
 						</t:customData>
 					</t:Column>
-					<t:Column
-						flexible="true"
-						sortProperty="OrderLongTxt"
-						width="9rem"
-					>
-						<Label
-							tooltip="{i18n>LongDescription}"
-							text="{i18n>LongDescription}"
-						/>
-						<t:template>
-							<TextArea
-								id="LongDescription"
-								enabled="{ListServiceOrder>EditableLine}"
-								value="{ListServiceOrder>OrderLongTxt}"
-								submit="onCheckInputField"
-							/>
-						</t:template>
-						<t:customData>
-							<c:CustomData
-								key="tableType"
-								value="All"
-							/>
-						</t:customData>
-					</t:Column>
+					
 					<t:Column
 						flexible="true"
 						sortProperty="Status"
@@ -248,6 +256,7 @@
 						<Label
 							tooltip="{i18n>InOutBudget}"
 							text="{i18n>InOutBudget}"
+							required="true"
 						/>
 						<t:template>
 							<Select
@@ -284,47 +293,13 @@
 					</t:Column>
 					<t:Column
 						flexible="true"
-						sortProperty="Responsible"
-						width="9rem"
-					>
-						<Label
-							tooltip="{i18n>Responsible}"
-							text="{i18n>Responsible}"
-						/>
-						<t:template>
-							<Input
-								id="idInputResponsible"
-								showSuggestion="true"
-								suggest="onSuggestResponsible"
-								enabled="{ListServiceOrder>EditableLine}"
-								value="{ListServiceOrder>Responsible}"
-								suggestionItems="{/ValueHelps}"
-								suggestionItemSelected="onSuggestResponsibleSelected"
-							>
-								<suggestionItems>
-									<c:ListItem
-										key="{Code}"
-										text="{Description} ({Code})"
-										additionalText=""
-									/>
-								</suggestionItems>
-							</Input>
-						</t:template>
-						<t:customData>
-							<c:CustomData
-								key="tableType"
-								value="All"
-							/>
-						</t:customData>
-					</t:Column>
-					<t:Column
-						flexible="true"
 						sortProperty="ExpectedStartDate"
 						width="9rem"
 					>
 						<Label
 							tooltip="{i18n>ExpectedStartDate}"
 							text="{i18n>ExpectedStartDate}"
+							required="true"
 						/>
 						<t:template>
 							<DatePicker
@@ -366,6 +341,42 @@
 					</t:Column>
 					<t:Column
 						flexible="true"
+						sortProperty="Responsible"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>Responsible}"
+							text="{i18n>Responsible}"
+						/>
+						<t:template>
+							<Input
+								id="idInputResponsible"
+								showSuggestion="true"
+								suggest="onSuggestResponsible"
+								enabled="{ListServiceOrder>EditableLine}"
+								value="{ListServiceOrder>Responsible} {ListServiceOrder>ResponsibleText}"
+								suggestionItems="{/ValueHelps}"
+								suggestionItemSelected="onSuggestResponsibleSelected"
+							>
+								<suggestionItems>
+									<c:ListItem
+										key="{Code}"
+										text="{Description} ({Code})"
+										additionalText=""
+									/>
+								</suggestionItems>
+							</Input>
+						</t:template>
+						<t:customData>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
+						</t:customData>
+					</t:Column>
+					
+					<t:Column
+						flexible="true"
 						sortProperty="SoGrouping"
 						width="9rem"
 					>
@@ -378,6 +389,30 @@
 								id="idInputSoGrouping"
 								value="{ListServiceOrder>SoGrouping}"
 								enabled="{ListServiceOrder>EditableLine}"
+							/>
+						</t:template>
+						<t:customData>
+							<c:CustomData
+								key="tableType"
+								value="All"
+							/>
+						</t:customData>
+					</t:Column>
+					<t:Column
+						flexible="true"
+						sortProperty="OrderLongTxt"
+						width="9rem"
+					>
+						<Label
+							tooltip="{i18n>LongDescription}"
+							text="{i18n>LongDescription}"
+						/>
+						<t:template>
+							<TextArea
+								id="LongDescription"
+								enabled="{ListServiceOrder>EditableLine}"
+								value="{ListServiceOrder>OrderLongTxt}"
+								submit="onCheckInputField"
 							/>
 						</t:template>
 						<t:customData>
@@ -419,12 +454,35 @@
 							text="{i18n>ExtSystId}"
 						/>
 						<t:template>
+						<VBox>
+						
+						<Select
+								id="idExternalSystem"
+								items="{
+									path: '/ValueHelps',
+									filters: [{
+										path: 'FieldName',
+										operator: 'EQ',
+										value1: 'IAOS_TICKET_SYST'
+									}]
+								}"
+								selectedKey="{ListServiceOrder>ExternalSystem}"
+								
+								forceSelection="false"
+							>
+								<c:Item
+									key="{Code}"
+									text="{Description}"
+								/>
+							</Select>
 							<Input
 								id="ExtSystId"
 								maxLength="40"
 								value="{ListServiceOrder>ExternalSystemTicketId}"
 								enabled="{ListServiceOrder>EditableLine}"
 							/>
+						</VBox>
+							
 						</t:template>
 						<t:customData>
 							<c:CustomData
@@ -651,35 +709,7 @@
 							/>
 						</t:customData>
 					</t:Column>
-					<t:Column
-						flexible="true"
-						width="4em"
-					>
-						<Label/>
-						<t:template>
-							<Button
-								icon="sap-icon://message-warning"
-								text="{ListServiceOrder>WarningCount}"
-								press="onWarningButtonPressed"
-								class="sapUiSmallMarginEnd"
-								visible="{ListServiceOrder>DisplayWarning}"
-							/>
-						</t:template>
-					</t:Column>
-					<t:Column
-						flexible="true"
-						width="6em"
-					>
-						<Label/>
-						<t:template>
-							<!-- 						visible="{ListServiceOrder>DisplayWarning}"  enabled="{ListServiceOrder>DisplayWarning}" -->
-							<Button
-								icon="sap-icon://delete"
-								press="onRemoveLineButtonPressed"
-								class="sapUiSmallMarginEnd"
-							/>
-						</t:template>
-					</t:Column>
+					
 				</t:columns>
 			</t:Table>
 		</content>
@@ -709,7 +739,7 @@
 					<Button
 						text="{i18n>SendPosting}"
 						type="Accept"
-						press="onSendPosting"
+						press="onSave"
 					/>
 				</contentRight>
 			</Bar>

@@ -296,7 +296,8 @@ sap.ui.define([
 				oData.WarningCount = i;
 			}.bind(this));
 			this.getView().getModel("ListServiceOrder").setProperty("/", aData);
-			return bReturn;
+			this.onSave(true);
+			//return bReturn;
 		},
 		_handleMessages: function (oResponse) {
 			try {
@@ -568,7 +569,8 @@ sap.ui.define([
 				});
 				aRefinedData.push(oItem);
 				aDateProperty.forEach(function (oDateProperty) {
-					oItem[oDateProperty] = new Date(oItem[oDateProperty].split(".").reverse().join("-") + "GMT")
+					if (oItem[oDateProperty] && oItem[oDateProperty].indexOf(".") !== -1)
+						oItem[oDateProperty] = new Date(oItem[oDateProperty].split(".").reverse().join("-") + "GMT")
 				});
 
 			});
@@ -602,6 +604,7 @@ sap.ui.define([
 			aData.splice(iIndex, 1);
 			this.getView().getModel("ListServiceOrder").setProperty("/", aData);
 		},
+		
 		_addStaticValues: function (oDataItem) {
 			var aStaticConfig = [{
 				"key": "OrderId",
@@ -677,6 +680,10 @@ sap.ui.define([
 				fileName: "Deliverables Mass Creation.xlsx"
 			});
 			oSheet.build().then().finally(oSheet.destroy);
+			/*var zsData = XLSX.utils.aoa_to_sheet([aCols]);
+			var zs = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(zs,zsData,"Sheet");
+			XLSX.writeFile(zs,"Deliverables Mass Creation.xlsx");*/
 		},
 
 		_createColumnListForExcel: function (sTable) {
@@ -700,9 +707,13 @@ sap.ui.define([
 					return oDataMap;
 				}
 			});
+			var aLabelToBeExcluded = ["Parent Description","Order ID","Order Type"];
+			oMapping = oMapping.filter(function(oCol){
+				return (oCol && aLabelToBeExcluded.indexOf(oCol.label) === -1) ? true : false ;
+			}.bind(this));
 			return oMapping;
 		},
-		onSave: function () {
+		onSendPosting: function () {
 			var aData = this.getView().getModel("ListServiceOrder").getData();
 			if (!aData.length) {
 				return;
@@ -714,17 +725,117 @@ sap.ui.define([
 				aProps.forEach(function (oProperty) {
 					oCreateData[oProperty] = oItem[oProperty];
 				}.bind(this));
+
 				aCreateData.push(oCreateData);
 			}.bind(this));
+			var oPayload = {
+				"OrderId": "%00000000001",
+				"DeliverableItemSet": aCreateData
+			};
+			this._createPromise("/Deliverables").callService("create", oPayload, {}).
+				then(function (oResponse) {
+					var oText = this.getView().getModel("i18n").getResourceBundle().getText("saveSuccess");
+					MessageBox.success(oText);
+				}.bind(this)).catch(function (oError) {
+					/*var oText = JSON.parse(oError.responseText).error.message.value; // this.getView().getModel("i18n").getResourceBundle().getText("errorOnSave");
+					MessageBox.error(oText);*/
+					var aErrors = JSON.parse(oError.responseText).error.innererror.errordetails;
+					aErrors = aErrors.filter(el => el.code !== "/IWBEP/CX_MGW_BUSI_EXCEPTION");
+					var oError = { Warning: aErrors };
+
+					var Error = oError;
+					//this._handleMessages(oError.Warning);
+					//oItem.WarningCount = oError.Warning.length;
+
+				}.bind(this))
+
+
+		},
+		onSuggestResponsible: function (oEvent) {
+			var aFilters = [new Filter("FieldName", FilterOperator.EQ, "RESPONSIBLE")];
+			var sTerm = oEvent.getParameter("suggestValue");
+
+			if (sTerm) {
+				//Here it's an equal not a contains because of the backend treatment
+				aFilters.push(new Filter("FilterString", FilterOperator.EQ, sTerm));
+			}
+
+			oEvent.getSource().getBinding("suggestionItems").filter(aFilters);
+
+			//Do not filter the provided suggestions before showing them to the user
+			oEvent.getSource().setFilterSuggests(false);
+		},
+
+		onSuggestResponsibleSelected: function (oEvent) {
+			var oSelectedObject = oEvent.getParameter("selectedItem").getBindingContext().getObject();
+			var oContext = oEvent.getSource().getBindingContext("ListServiceOrder");
+			this.getView().getModel("ListServiceOrder").setProperty(oContext.getPath() + "/Responsible", oSelectedObject.Code);
+
+			this.getView().getModel("ListServiceOrder").setProperty(oContext.getPath() + "/ResponsibleText", oSelectedObject.Description);
+
+		},
+		onSave: function (bTest) {
+			var aData = this.getView().getModel("ListServiceOrder").getData();
+			if (!aData.length) {
+				return;
+			}
+			var aProps = this._getCreateProperties();
+			var aCreateData = [];
 			var aPromise = [];
-			aCreateData.forEach(function (oCreateData) {
-				aPromise.push(this._createPromise("/Deliverables").callService("create", oCreateData, {}));
+			var iErr = 0;
+			aData.forEach(function (oItem) {
+				var oCreateData = {};
+				aProps.forEach(function (oProperty) {
+					oCreateData[oProperty] = oItem[oProperty];
+				}.bind(this));
+				if (bTest === true) {
+					oCreateData.Test = true;
+				} else {
+					oCreateData.Test = false;
+				}
+				aCreateData.push(oCreateData);
+				oItem.Error = {};
+				oItem.WarningCount = 0;
+
+				var oPromise = this._createPromise("/Deliverables").callService("create", oCreateData, {}).then(function () { }.bind(this)).catch(function (oError) {
+					iErr = iErr + 1;
+					if (JSON.parse(oError.responseText) && JSON.parse(oError.responseText).error.innererror)
+						var aErrors = JSON.parse(oError.responseText).error.innererror.errordetails;
+					aErrors = aErrors.filter(el => el.code !== "/IWBEP/CX_MGW_BUSI_EXCEPTION");
+					var oError = { Warning: aErrors };
+
+					oItem.Error = oError;
+					oItem.WarningCount = oError.Warning.length;
+				}.bind(oItem)).finally(function () {
+					this.getView().getModel("ListServiceOrder").updateBindings();
+				}.bind(this));
+				aPromise.push(oPromise);
 			}.bind(this));
-			Promise.all(aPromise).then(function () { }.bind(this));
+			Promise.all(aPromise).then(function () { }.bind(this)).finally(function () {
+				if (!bTest) {
+					if (iErr > 0) {
+						var oText = this.getView().getModel("i18n").getResourceBundle().getText("errorOnSave");
+						MessageBox.error(oText);
+					} else {
+						var oText = this.getView().getModel("i18n").getResourceBundle().getText("saveSuccess");
+						MessageBox.success(oText);
+					}
+				}
+			}.bind(this));
+			aCreateData.forEach(function (oCreateData) {
+				//;
+
+			}.bind(this));
+			/*Promise.all(aPromise).then(function (aData) {
+				
+			}.bind(this)).catch(function(oError){
+				console.log(oError);
+			}.bind(this));*/
+
 		},
 		_createPromise: function (url) {
-
-			var me = { model: this.getview().getModel() };
+			var oModel = this.getView().getModel();
+			var me = { model: oModel };
 			var core = {
 				ajax: function (type, url, data, parameters) {
 					var promise = new Promise(function (resolve, reject) {
